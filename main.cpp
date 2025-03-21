@@ -22,40 +22,42 @@ int main() {
 
     readFile(filename, wheel1);
 
+    //Prompt for total number of iterations
+    int totalIterations;
+    cout << "Enter total iterations: ";
+    cin >> totalIterations;
+
+    int numIterations = 1; //number of times
+    int numSpins = 1; //number of spins before winning
+    int topSpins = 1; //tracker for highest number of spins before winning
+
     Number* temp;
 
-
-
-    int numSpins = 1;
-    int iterations = 1;
-    int topIterations = 1;
-
-    while (true) {
+    while (numIterations <= totalIterations) {
         temp = wheel1->spin();
         cout << *temp;
 
         //End if black
         if (temp->getColor() != "red") {
 
-            iterations++;
+            numSpins++; //increment the number of spins
         }
         else {
 
-            if (iterations > topIterations) {
-                topIterations = iterations;
+            //Check if there is a new highest number of spins
+            if (numSpins > topSpins) {
+                topSpins = numSpins;
             }
 
+            cout << "Number of iterations: " << numIterations << endl;
             cout << "Number of spins: " << numSpins << endl;
-            cout << "Number of iterations: " << iterations << endl;
-            cout << "Top iterations: " << topIterations << endl;
-            cout << "Chance: 1/" << pow(2, iterations) << endl;
+            cout << "Top number of spins: " << topSpins << endl;
+            cout << "Chance: 1/" << pow(2, numSpins) << endl;
             cout << endl;
-            numSpins++;
-            iterations = 1;
+            numIterations++; //increment the number of iterations
+            numSpins = 1; //reset the number of spins
         }
-
     }
-
 
     delete temp;
     delete wheel1;
@@ -103,6 +105,4 @@ void readLine(const string& line, Number*& n) {
     string color = line.substr(index + 1);
 
     n = new Number(value, color);
-
-
 }
