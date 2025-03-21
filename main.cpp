@@ -17,12 +17,15 @@ void readLine(const string& line, Number*& n);
 
 int main() {
 
-    string filename = "wheel_template.txt";
+    const string inputFilename = "wheel_template.txt";
     Wheel* wheel1 = nullptr;
 
-    readFile(filename, wheel1);
+    readFile(inputFilename, wheel1);
 
-    //Prompt for total number of iterations
+    const string outputFilename = "output.txt";
+    ofstream output("../" + outputFilename);
+
+    //Prompt for total number of iterations (integers only)
     int totalIterations;
     cout << "Enter total iterations: ";
     cin >> totalIterations;
@@ -31,11 +34,11 @@ int main() {
     int numSpins = 1; //number of spins before winning
     int topSpins = 1; //tracker for highest number of spins before winning
 
-    Number* temp;
+    Number* temp = nullptr;
 
     while (numIterations <= totalIterations) {
         temp = wheel1->spin();
-        cout << *temp;
+        output << *temp;
 
         //End if black
         if (temp->getColor() != "red") {
@@ -47,23 +50,29 @@ int main() {
             //Check if there is a new highest number of spins
             if (numSpins > topSpins) {
                 topSpins = numSpins;
+                cout << "Top number of spins: " << topSpins << endl;
             }
 
-            cout << "Number of iterations: " << numIterations << endl;
-            cout << "Number of spins: " << numSpins << endl;
-            cout << "Top number of spins: " << topSpins << endl;
-            cout << "Chance: 1/" << pow(2, numSpins) << endl;
-            cout << endl;
+            output << "Number of iterations: " << numIterations << endl;
+            output << "Number of spins: " << numSpins << endl;
+            output << "Top number of spins: " << topSpins << endl;
+            output << "Chance: 1/" << pow(2, numSpins) << endl;
+            output << endl;
             numIterations++; //increment the number of iterations
             numSpins = 1; //reset the number of spins
         }
     }
 
+    //Mark end of the simulation
+    output << "Simulation complete!";
+    cout << "Simulation complete!";
+
+    output.close();
+
     delete temp;
     delete wheel1;
 
-    return 0;
-
+    return 1;
 }
 
 void readFile(const string& filename, Wheel*& w) {
